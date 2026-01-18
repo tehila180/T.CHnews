@@ -58,7 +58,7 @@ export default function LoginScreen({ onSwitch }: Props) {
       if (data.disabled === true) {
         await signOut(auth); // 🔥 קריטי
         setError(
-          "החשבון שלך נחסם.\nלפרטים נוספים יש לפנות למנהל האתר."
+          " החשבון שלך נחסם .\n   לפרטים נוספים יש לפנות למנהל האתר באימייל זה tehila.ch12@gmail.com "
         );
         return;
       }
@@ -74,7 +74,7 @@ export default function LoginScreen({ onSwitch }: Props) {
       } else if (e.code === "auth/invalid-email") {
         setError("אימייל לא תקין");
       } else {
-        setError("שגיאה בהתחברות, נסה שוב");
+        setError("שגיאה בהתחברות, נסה שוב/אימייל או סיסמה שגויים");
       }
     } finally {
       setLoading(false);
