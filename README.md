@@ -7,7 +7,7 @@
 
 ## 📌 תיאור כללי
 
-T.CHnews היא פלטפורמה קהילתית מודרנית המשלבת:
+ה T.CHnews היא פלטפורמה קהילתית מודרנית המשלבת:
 - מערכת פוסטים ותגובות בזמן אמת
 - ניהול משתמשים והרשאות מתקדם
 - פרופילים אישיים
@@ -163,31 +163,31 @@ T.CHnews היא פלטפורמה קהילתית מודרנית המשלבת:
 ---
 
 ## 📁 מבנה הפרויקט
-src/
-├── screens/
-│   ├── HomeScreen.tsx
-│   ├── LoginScreen.tsx
-│   ├── RegisterScreen.tsx
-│   ├── CreatePostScreen.tsx
-│   ├── EditPostScreen.tsx
-│   ├── PostDetailsScreen.tsx
-│   ├── ProfileScreen.tsx
-│   └── AdminUsersScreen.tsx
-│
-├── components/
-│   └── Header.tsx
-│
-├── hooks/
-│   └── useAuth.ts
-│
-├── lib/
-│   ├── firebase.ts
-│   ├── posts.ts
-│   ├── upload.ts
-│   └── newsApi.ts
-│
-├── types/
-   └── Post.ts
+-src/
+-├── screens/
+-│   ├── HomeScreen.tsx
+-│   ├── LoginScreen.tsx
+-│   ├── RegisterScreen.tsx
+-│   ├── CreatePostScreen.tsx
+-│   ├── EditPostScreen.tsx
+-│   ├── PostDetailsScreen.tsx
+-│   ├── ProfileScreen.tsx
+-│   └── AdminUsersScreen.tsx
+-│
+-├── components/
+-│   └── Header.tsx
+-│
+-├── hooks/
+-│   └── useAuth.ts
+-│
+-├── lib/
+-│   ├── firebase.ts
+-│   ├── posts.ts
+-│   ├── upload.ts
+-│   └── newsApi.ts
+-│
+-├── types/
+-   └── Post.ts
    
 ---
 
@@ -216,14 +216,20 @@ src/
 ## ⚙️ הרצה מקומית
 
 התקנת חבילות:
+
 npm install
+
 
 הרצת האפליקציה:
 
+
 npx expo start
 
+
 הרצה לווב:
+
 npx expo start --web
+
 
 ---
 
@@ -240,3 +246,4 @@ T.CHnews היא מערכת קהילתית מתקדמת המדגימה:
 ## יוצרת הפרוייקט 
 - תהילה חסון
 - לכל שאלה בנושא איימייל : tehila.ch12@gmail.com
+
