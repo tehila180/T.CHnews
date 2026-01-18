@@ -164,29 +164,49 @@
 
 ## 📁 מבנה הפרויקט
 src/
+
+
  screens/
+ 
  HomeScreen.tsx
+ 
  LoginScreen.tsx
+ 
  RegisterScreen.tsx
+ 
  CreatePostScreen.tsx
+ 
  EditPostScreen.tsx
+ 
  PostDetailsScreen.tsx
+ 
  ProfileScreen.tsx
+ 
  AdminUsersScreen.tsx
 
  components/
+ 
+ 
  Header.tsx
 
  hooks/
+ 
  useAuth.ts
+ 
 
  lib/
+ 
  firebase.ts
+ 
  posts.ts
+ 
  upload.ts
+ 
  newsApi.ts
+ 
 
  types/
+ 
  Post.ts
    
 ---
@@ -246,5 +266,6 @@ T.CHnews היא מערכת קהילתית מתקדמת המדגימה:
 ## יוצרת הפרוייקט 
 - תהילה חסון
 - לכל שאלה בנושא איימייל : tehila.ch12@gmail.com
+
 
 
