@@ -59,7 +59,7 @@ export default function Header({
           onPress={() => nav("home")}
           hitSlop={10}
         >
-          <Text style={styles.logo}>T.CH.news</Text>
+          <Text style={styles.logo}>T.CHnews</Text>
         </Pressable>
 
         {/* ---------- RIGHT ---------- */}
@@ -137,9 +137,9 @@ export default function Header({
 /* ---------- Styles ---------- */
 const styles = StyleSheet.create({
   safe: {
-    backgroundColor: "#ffffff",
+   backgroundColor: "rgba(255, 255, 255, 0.3) ",
     borderBottomWidth: 1,
-    borderBottomColor: "#e5e7eb",
+    borderBottomColor: "#e5e7eb92",
   },
 
   header: {
@@ -149,13 +149,13 @@ const styles = StyleSheet.create({
 
     paddingHorizontal: 16,
     paddingVertical: 12,
-    paddingTop: 18, // רווח מה־status bar
+    paddingTop: 15, // רווח מה־status bar
   },
 
   logo: {
-    fontSize: 20,
+    fontSize: 30,
     fontWeight: "800",
-    color: "#000000",
+    color: "#ffffff",
   },
 
   right: {
@@ -190,11 +190,11 @@ const styles = StyleSheet.create({
   link: {
     fontSize: 15,
     fontWeight: "600",
-    color: "#2563eb",
+    color: "#000000",
   },
 
   primary: {
-    backgroundColor: "#2563eb",
+    backgroundColor: "#1e2023",
     color: "#ffffff",
     paddingVertical: 6,
     paddingHorizontal: 12,
