@@ -235,7 +235,7 @@ export default function PostDetailsScreen({
 const styles = StyleSheet.create({
   page: {
     padding: 16,
-    backgroundColor: "#f9fafb",
+ 
     alignItems: "center",
   },
 
@@ -248,7 +248,7 @@ const styles = StyleSheet.create({
   card: {
     width: "100%",
     maxWidth: 800,
-    backgroundColor: "#ffffff",
+     backgroundColor: "rgba(255, 255, 255, 0.3)",
     borderRadius: 22,
     padding: 20,
     marginBottom: 20,
@@ -309,7 +309,7 @@ const styles = StyleSheet.create({
   },
 
   commentCard: {
-    backgroundColor: "#ffffff",
+     backgroundColor: "rgba(255, 255, 255, 0.3)",
     borderRadius: 16,
     padding: 14,
     marginBottom: 10,
@@ -324,7 +324,7 @@ const styles = StyleSheet.create({
 
   commentDate: {
     fontSize: 12,
-    color: "#6b7280",
+    color: "#000000",
     marginBottom: 6,
   },
 
