@@ -143,13 +143,13 @@ const styles = StyleSheet.create({
   page: {
     padding: 20,
     alignItems: "center",
-    backgroundColor: "#f9fafb",
+   
   },
 
   card: {
     width: "100%",
     maxWidth: 640,
-    backgroundColor: "#ffffff",
+    backgroundColor: "rgba(255, 255, 255, 0.3)",
     borderRadius: 22,
     padding: 20,
     shadowColor: "#000",
