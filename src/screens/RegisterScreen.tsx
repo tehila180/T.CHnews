@@ -152,13 +152,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 24,
-    backgroundColor: "#f3f4f6",
+    
   },
 
   card: {
     width: "100%",
     maxWidth: Platform.OS === "web" ? 560 : 420,
-    backgroundColor: "#ffffff",
+    backgroundColor: "rgba(255, 255, 255, 0.3)",
     borderRadius: 28,
     paddingVertical: Platform.OS === "web" ? 36 : 24,
     paddingHorizontal: Platform.OS === "web" ? 40 : 24,
@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: Platform.OS === "web" ? 16 : 14,
     textAlign: "center",
-    color: "#6b7280",
+    color: "#000000",
     marginBottom: 26,
   },
 
