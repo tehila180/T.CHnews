@@ -170,7 +170,7 @@ export default function AdminUsersScreen({ currentUser }: Props) {
 const styles = StyleSheet.create({
   page: {
     padding: 16,
-    backgroundColor: "#ffffff",
+   
   },
 
   title: {
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#e5e7eb",
     marginBottom: 12,
-    backgroundColor: "#f9fafb",
+    backgroundColor: "rgba(255, 255, 255, 0.34)",
   },
 
   userBlocked: {
@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
 
   meta: {
     fontSize: 13,
-    color: "#374151",
+    color: "#1a1b1c",
   },
 
   blockedLabel: {
