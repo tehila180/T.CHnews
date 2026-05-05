@@ -173,31 +173,39 @@ export default function HomeScreen({
       )}
 
       {/* 📰 Breaking News */}
-      {!!news.length && (
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>📰 חדשות מתפרצות</Text>
+     {!!news.length && (
+  <View style={styles.section}>
+    <Text style={styles.sectionTitle}>📰 חדשות מתפרצות</Text>
 
-          {news.map((n) => (
-            <Pressable
-              key={n.article_id}
-              style={styles.card}
-              onPress={() => Linking.openURL(n.link!)}
-            >
-              {n.image_url && (
-                <Image
-                  source={{ uri: n.image_url }}
-                  style={styles.postImage}
-                />
-              )}
-              <Text style={styles.title}>{n.title}</Text>
-            </Pressable>
-          ))}
+    {news.map((n, index) => (
+      <Pressable
+        key={n.article_id}
+        style={[
+          styles.card,
+          index === 0 && styles.mainNewsCard,
+        ]}
+        onPress={() => Linking.openURL(n.link!)}
+      >
+       {/* תמונה רק ל־3 הראשונים */}
+{index < 3 && n.image_url && (
+  <Image
+    source={{ uri: n.image_url }}
+    style={[
+      styles.postImage,
+      index === 0 && styles.mainNewsImage,
+    ]}
+  />
+)}
 
-          <Pressable onPress={onOpenNews}>
-            <Text style={styles.link}>לכל החדשות בזמן אמת →</Text>
-          </Pressable>
-        </View>
-      )}
+        <Text style={styles.title}>{n.title}</Text>
+      </Pressable>
+    ))}
+
+    <Pressable onPress={onOpenNews}>
+      <Text style={styles.link}>לכל החדשות בזמן אמת →</Text>
+    </Pressable>
+  </View>
+)}
 
       {/* 🏘️ Community */}
       <View style={styles.section}>
@@ -268,105 +276,161 @@ export default function HomeScreen({
 /* ---------- Styles ---------- */
 const styles = StyleSheet.create({
   section: {
-    paddingVertical: 20,
-    backgroundColor: "#ffffff",
+    paddingVertical: 22,
     borderBottomWidth: 1,
-    borderBottomColor: "#e5e7eb",
+    borderBottomColor: "rgba(255,255,255,0.08)",
   },
+  mainNewsCard: {
+  transform: [{ scale: 1.02 }],
+  borderColor: "rgba(255,255,255,0.3)",
+},
+
+mainNewsImage: {
+  height: 320,
+  borderRadius: 18,
+},
+
   sectionTitle: {
-    fontSize: 20,
-    fontWeight: "700",
+    fontSize: 22,
+    fontWeight: "800",
+    color: "#ffffff",
     marginBottom: 14,
     paddingHorizontal: 20,
+    letterSpacing: 0.5,
   },
 
   hotScroll: {
     paddingHorizontal: 20,
   },
+
   hotCard: {
-    width: 260,
+    width: 270,
     marginRight: 14,
     padding: 16,
     borderRadius: 18,
-    backgroundColor: "#f9fafb",
+
+    backgroundColor: "rgba(255,255,255,0.12)",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.18)",
+
+    shadowColor: "#000",
+    shadowOpacity: 0.15,
+    shadowRadius: 10,
+    elevation: 4,
   },
 
   card: {
-    width: "100%",
+    width: "92%",
     maxWidth: 720,
     alignSelf: "center",
     marginVertical: 10,
-    padding: 20,
-    borderRadius: 22,
-    backgroundColor: "#ffffff",
-    elevation: 4,
+    padding: 18,
+    borderRadius: 20,
+
+    backgroundColor: "rgba(255,255,255,0.14)",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.18)",
+
+    shadowColor: "#000",
+    shadowOpacity: 0.18,
+    shadowRadius: 12,
+    elevation: 5,
   },
 
   author: {
     fontWeight: "700",
-    color: "#2563eb",
+    color: "#60a5fa",
+    fontSize: 14,
+    marginBottom: 4,
   },
+
   date: {
     fontSize: 12,
-    color: "#6b7280",
-    marginBottom: 6,
+    color: "#cbd5e1",
+    marginBottom: 8,
   },
+
   title: {
-    fontSize: 17,
-    fontWeight: "700",
+    fontSize: 18,
+    fontWeight: "800",
+    color: "#ffffff",
     marginBottom: 6,
   },
+
   postImage: {
     width: "100%",
-    height: 260,
+    height: 240,
     borderRadius: 16,
     marginVertical: 12,
-    backgroundColor: "#e5e7eb",
+    backgroundColor: "#1f2937",
   },
+
   time: {
     fontSize: 12,
-    color: "#6b7280",
+    color: "#cbd5e1",
     marginTop: 6,
   },
 
   link: {
-    color: "#2563eb",
-    marginTop: 8,
-    fontWeight: "600",
-    paddingHorizontal: 20,
-  },
+  color: "#ffffff",
+  marginTop: 14,
+  fontWeight: "900",
+  fontSize: 16,
+  textAlign: "center",
+
+  paddingVertical: 12,
+  paddingHorizontal: 18,
+  marginHorizontal: 20,
+
+  backgroundColor: "rgba(37, 99, 235, 0.85)",
+  borderRadius: 14,
+
+  overflow: "hidden",
+
+  shadowColor: "#000",
+  shadowOpacity: 0.2,
+  shadowRadius: 8,
+  elevation: 4,
+},
 
   openPostButton: {
     alignSelf: "flex-start",
     backgroundColor: "#2563eb",
     paddingVertical: 10,
     paddingHorizontal: 18,
-    borderRadius: 14,
+    borderRadius: 12,
     marginTop: 12,
   },
+
   openPostText: {
     color: "#ffffff",
     fontWeight: "700",
+    letterSpacing: 0.3,
   },
 
   actionsRow: {
     flexDirection: "row",
-    gap: 12,
+    gap: 10,
     marginTop: 14,
   },
+
   actionButton: {
     paddingVertical: 8,
     paddingHorizontal: 14,
-    borderRadius: 12,
+    borderRadius: 10,
   },
+
   editButton: {
-    backgroundColor: "#e0f2fe",
+    backgroundColor: "rgba(59, 131, 246, 0.36)",
   },
+
   deleteButton: {
-    backgroundColor: "#fee2e2",
+    backgroundColor: "rgba(239, 68, 68, 0.3)",
   },
+
   actionText: {
     fontWeight: "600",
     fontSize: 13,
+    color: "#ffffff",
   },
 });
