@@ -1,6 +1,6 @@
 # 📰 T.CHnews – Community News Platform
 📄לצפייה בתמונות והסברים מתוך הפרויקט:
-[Uploading תמונות והסברים מתוך הפרוייקט T.CHnews.pdf…]()
+[תמונות והסברים מתוך הפרוייקט T.CHnews.pdf](https://github.com/user-attachments/files/27396279/T.CHnews.pdf)
 
 
 מערכת חדשות וקהילה מתקדמת ל־Web ול־Mobile, המאפשרת למשתמשים לפרסם פוסטים, להגיב בזמן אמת, לנהל פרופיל אישי ולצרוך חדשות חיצוניות.  
