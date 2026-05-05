@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     overflow: "hidden",
-    backgroundColor: "#fff",
+    backgroundColor: "#ffffff62",
   },
   cardWeb: {
     marginHorizontal: 8,
