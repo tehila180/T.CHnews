@@ -1,4 +1,4 @@
- import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -24,19 +24,22 @@ import { db } from "../lib/firebase";
 import { User } from "firebase/auth";
 import * as ImagePicker from "expo-image-picker";
 import { uploadImage } from "../lib/upload";
-import PostDetailsScreen from "./PostDetailsScreen";
 import { Post } from "../types/Post";
 
 type Props = {
   userId: string;
   currentUser: User | null;
   onBack: () => void;
+
+  // ✅ FIX חדש - מעבר לפוסט דרך App
+  onOpenPost: (postId: string) => void;
 };
 
 export default function ProfileScreen({
   userId,
   currentUser,
   onBack,
+  onOpenPost, // 👈 חדש
 }: Props) {
   const isMe = currentUser?.uid === userId;
 
@@ -50,7 +53,6 @@ export default function ProfileScreen({
   const [createdAt, setCreatedAt] = useState<Timestamp | null>(null);
 
   const [posts, setPosts] = useState<Post[]>([]);
-  const [openPostId, setOpenPostId] = useState<string | null>(null);
 
   useEffect(() => {
     async function loadProfile() {
@@ -76,9 +78,7 @@ export default function ProfileScreen({
     );
 
     return onSnapshot(q, (snap) => {
-      setPosts(
-        snap.docs.map((d) => ({ id: d.id, ...(d.data() as any) }))
-      );
+      setPosts(snap.docs.map((d) => ({ id: d.id, ...(d.data() as any) })));
     });
   }, [userId]);
 
@@ -93,29 +93,20 @@ export default function ProfileScreen({
 
   async function save() {
     if (!isMe || !currentUser) return;
+
     await updateDoc(doc(db, "users", userId), {
       username,
       age: age ? Number(age) : null,
       bio,
       photoUrl,
     });
+
     setEditing(false);
   }
 
   function formatDate(ts?: Timestamp | null) {
     if (!ts) return "";
     return ts.toDate().toLocaleDateString("he-IL");
-  }
-
-  if (openPostId) {
-    return (
-      <PostDetailsScreen
-        postId={openPostId}
-        user={currentUser}
-        role="USER"
-        onBack={() => setOpenPostId(null)}
-      />
-    );
   }
 
   if (loading) {
@@ -174,6 +165,7 @@ export default function ProfileScreen({
                   placeholder="ביוגרפיה"
                   multiline
                 />
+
                 <Pressable style={styles.primaryButton} onPress={save}>
                   <Text style={styles.primaryText}>שמור</Text>
                 </Pressable>
@@ -181,8 +173,9 @@ export default function ProfileScreen({
             ) : (
               <>
                 <Text style={styles.name}>{username}</Text>
-               {age ? <Text style={styles.ageText}>גיל: {age}</Text> : null}
+                {age ? <Text style={styles.ageText}>גיל: {age}</Text> : null}
                 {bio ? <Text style={styles.bio}>{bio}</Text> : null}
+
                 <Text style={styles.date}>
                   הצטרף בתאריך: {formatDate(createdAt)}
                 </Text>
@@ -205,9 +198,11 @@ export default function ProfileScreen({
       renderItem={({ item }) => (
         <View style={styles.post}>
           <Text style={styles.postTitle}>{item.title}</Text>
+
+          {/* ✅ שינוי חשוב כאן */}
           <Pressable
             style={styles.openPostButton}
-            onPress={() => setOpenPostId(item.id)}
+            onPress={() => onOpenPost(item.id)}
           >
             <Text style={styles.openPostText}>כניסה לפוסט</Text>
           </Pressable>
@@ -292,7 +287,7 @@ const styles = StyleSheet.create({
   },
 
   date: {
-    fontSize: 13,
+    fontSize: 17,
     color: "#000000",
     marginTop: 6,
   },
