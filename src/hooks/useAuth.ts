@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { onAuthStateChanged, signOut, User } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, onSnapshot } from "firebase/firestore";
 import { auth, db } from "../lib/firebase";
 
 type Role = "ADMIN" | "USER";
@@ -12,7 +12,9 @@ export function useAuth() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, async (u) => {
+    let unsubUserDoc: (() => void) | null = null;
+
+    const unsubAuth = onAuthStateChanged(auth, (u) => {
       if (!u) {
         setUser(null);
         setRole("USER");
@@ -21,49 +23,45 @@ export function useAuth() {
         return;
       }
 
-      try {
-        const snap = await getDoc(doc(db, "users", u.uid));
+      setUser(u);
 
-        if (snap.exists()) {
-          const data = snap.data();
+      // 🔥 מאזין למסמך המשתמש בזמן אמת
+      const ref = doc(db, "users", u.uid);
 
-          // 🚫 משתמש חסום
-          if (data.disabled === true) {
-            await signOut(auth);
-            setUser(null);
-            setRole("USER");
-            setUsername(null);
-            setLoading(false);
-            return;
-          }
-
-          // 👤 username
-          if (typeof data.username === "string") {
-            setUsername(data.username);
-          } else {
-            setUsername(null);
-          }
-
-          // 👑 role
-          if (data.role === "ADMIN") {
-            setRole("ADMIN");
-          } else {
-            setRole("USER");
-          }
+      unsubUserDoc = onSnapshot(ref, async (snap) => {
+        if (!snap.exists()) {
+          setUsername(null);
+          setRole("USER");
+          setLoading(false);
+          return;
         }
 
-        setUser(u);
-      } catch (err) {
-        console.error("useAuth error:", err);
-        setUser(u);
-        setRole("USER");
-        setUsername(null);
-      } finally {
+        const data = snap.data();
+
+        // 🚫 חסימה
+        if (data.disabled === true) {
+          await signOut(auth);
+          setUser(null);
+          setUsername(null);
+          setRole("USER");
+          setLoading(false);
+          return;
+        }
+
+        // 👤 username
+        setUsername(typeof data.username === "string" ? data.username : null);
+
+        // 👑 role
+        setRole(data.role === "ADMIN" ? "ADMIN" : "USER");
+
         setLoading(false);
-      }
+      });
     });
 
-    return unsub;
+    return () => {
+      unsubAuth();
+      if (unsubUserDoc) unsubUserDoc();
+    };
   }, []);
 
   return { user, role, username, loading };
