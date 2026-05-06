@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+ import { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -24,20 +24,19 @@ import { db } from "../lib/firebase";
 import { User } from "firebase/auth";
 import * as ImagePicker from "expo-image-picker";
 import { uploadImage } from "../lib/upload";
+import PostDetailsScreen from "./PostDetailsScreen";
 import { Post } from "../types/Post";
 
 type Props = {
   userId: string;
   currentUser: User | null;
   onBack: () => void;
-  onOpenPost: (postId: string) => void;
 };
 
 export default function ProfileScreen({
   userId,
   currentUser,
   onBack,
-  onOpenPost,
 }: Props) {
   const isMe = currentUser?.uid === userId;
 
@@ -51,6 +50,7 @@ export default function ProfileScreen({
   const [createdAt, setCreatedAt] = useState<Timestamp | null>(null);
 
   const [posts, setPosts] = useState<Post[]>([]);
+  const [openPostId, setOpenPostId] = useState<string | null>(null);
 
   useEffect(() => {
     async function loadProfile() {
@@ -76,7 +76,9 @@ export default function ProfileScreen({
     );
 
     return onSnapshot(q, (snap) => {
-      setPosts(snap.docs.map((d) => ({ id: d.id, ...(d.data() as any) })));
+      setPosts(
+        snap.docs.map((d) => ({ id: d.id, ...(d.data() as any) }))
+      );
     });
   }, [userId]);
 
@@ -105,6 +107,17 @@ export default function ProfileScreen({
     return ts.toDate().toLocaleDateString("he-IL");
   }
 
+  if (openPostId) {
+    return (
+      <PostDetailsScreen
+        postId={openPostId}
+        user={currentUser}
+        role="USER"
+        onBack={() => setOpenPostId(null)}
+      />
+    );
+  }
+
   if (loading) {
     return (
       <View style={styles.center}>
@@ -128,27 +141,61 @@ export default function ProfileScreen({
             {photoUrl ? (
               <Image source={{ uri: photoUrl }} style={styles.avatar} />
             ) : (
-              <View style={styles.avatarEmpty}>
+              <View style={[styles.avatar, styles.avatarEmpty]}>
                 <Text>אין תמונה👤</Text>
               </View>
             )}
 
-            <Text style={styles.name}>{username}</Text>
-
-            {age ? <Text style={{ color: "#fff" }}>גיל: {age}</Text> : null}
-            {bio ? <Text style={styles.bio}>{bio}</Text> : null}
-
-            <Text style={styles.date}>
-              הצטרף בתאריך: {formatDate(createdAt)}
-            </Text>
-
-            {isMe && (
-              <Pressable
-                style={styles.primaryButton}
-                onPress={() => setEditing(true)}
-              >
-                <Text style={styles.primaryText}>ערוך פרופיל</Text>
+            {editing && isMe && (
+              <Pressable onPress={pickImage}>
+                <Text style={styles.link}>החלף תמונה</Text>
               </Pressable>
+            )}
+
+            {editing && isMe ? (
+              <>
+                <TextInput
+                  style={styles.input}
+                  value={username}
+                  onChangeText={setUsername}
+                  placeholder="שם משתמש"
+                />
+                <TextInput
+                  style={styles.input}
+                  value={age}
+                  onChangeText={setAge}
+                  placeholder="גיל"
+                  keyboardType="numeric"
+                />
+                <TextInput
+                  style={[styles.input, styles.textArea]}
+                  value={bio}
+                  onChangeText={setBio}
+                  placeholder="ביוגרפיה"
+                  multiline
+                />
+                <Pressable style={styles.primaryButton} onPress={save}>
+                  <Text style={styles.primaryText}>שמור</Text>
+                </Pressable>
+              </>
+            ) : (
+              <>
+                <Text style={styles.name}>{username}</Text>
+               {age ? <Text style={styles.ageText}>גיל: {age}</Text> : null}
+                {bio ? <Text style={styles.bio}>{bio}</Text> : null}
+                <Text style={styles.date}>
+                  הצטרף בתאריך: {formatDate(createdAt)}
+                </Text>
+
+                {isMe && (
+                  <Pressable
+                    style={styles.primaryButton}
+                    onPress={() => setEditing(true)}
+                  >
+                    <Text style={styles.primaryText}>ערוך פרופיל</Text>
+                  </Pressable>
+                )}
+              </>
             )}
           </View>
 
@@ -158,10 +205,9 @@ export default function ProfileScreen({
       renderItem={({ item }) => (
         <View style={styles.post}>
           <Text style={styles.postTitle}>{item.title}</Text>
-
           <Pressable
             style={styles.openPostButton}
-            onPress={() => onOpenPost(item.id)}
+            onPress={() => setOpenPostId(item.id)}
           >
             <Text style={styles.openPostText}>כניסה לפוסט</Text>
           </Pressable>
@@ -170,11 +216,11 @@ export default function ProfileScreen({
     />
   );
 }
+
 /* ---------- Styles ---------- */
 const styles = StyleSheet.create({
   page: {
     padding: 16,
-    backgroundColor: "transparent",
   },
 
   header: {
@@ -184,30 +230,43 @@ const styles = StyleSheet.create({
   back: {
     color: "#60a5fa",
     marginBottom: 12,
-    fontWeight: "600",
+    fontWeight: "700",
     fontSize: 14,
   },
+  ageText: {
+  color: "#ffffff",
+},
 
   profileTop: {
     alignItems: "center",
-    padding: 20,
-    borderRadius: 20,
-    backgroundColor: "rgba(255,255,255,0.15)",
+    padding: 22,
+    borderRadius: 22,
+
+    backgroundColor: "rgba(255,255,255,0.08)",
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.2)",
+    borderColor: "rgba(255,255,255,0.12)",
+
+    shadowColor: "#000",
+    shadowOpacity: 0.25,
+    shadowRadius: 12,
+    elevation: 6,
   },
 
   avatar: {
     width: 140,
     height: 140,
     borderRadius: 70,
-    marginBottom: 10,
+    marginBottom: 12,
+
     borderWidth: 2,
-    borderColor: "rgba(255,255,255,0.3)",
+    borderColor: "rgba(96,165,250,0.4)",
   },
 
   avatarEmpty: {
-    backgroundColor: "rgba(255,255,255,0.2)",
+    width: 140,
+    height: 140,
+    borderRadius: 70,
+    backgroundColor: "rgba(255,255,255,0.12)",
     justifyContent: "center",
     alignItems: "center",
   },
@@ -215,36 +274,37 @@ const styles = StyleSheet.create({
   link: {
     color: "#60a5fa",
     marginBottom: 10,
-    fontWeight: "500",
+    fontWeight: "600",
   },
 
   name: {
     fontSize: 26,
-    fontWeight: "800",
-    color: "#fff",
-    marginTop: 6,
+    fontWeight: "900",
+    color: "#ffffff",
+    marginTop: 8,
   },
 
   bio: {
-    marginTop: 6,
+    marginTop: 8,
     textAlign: "center",
-    color: "#fcfcfc",
+    color: "#ffffff",
+    lineHeight: 20,
   },
 
- date: {
-  fontSize: 15,
-  color: "#000000", 
-  marginTop: 6,
-},
+  date: {
+    fontSize: 13,
+    color: "#000000",
+    marginTop: 6,
+  },
 
   input: {
     width: "100%",
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.3)",
+    borderColor: "rgba(255,255,255,0.15)",
     padding: 12,
     marginTop: 10,
     borderRadius: 12,
-    backgroundColor: "rgba(255,255,255,0.1)",
+    backgroundColor: "rgba(255,255,255,0.06)",
     color: "#fff",
   },
 
@@ -254,66 +314,65 @@ const styles = StyleSheet.create({
   },
 
   primaryButton: {
-    backgroundColor: "#3b82f6",
+    backgroundColor: "#2563eb",
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 14,
     marginTop: 16,
 
-    // shadow (מראה כפתור מודרני)
-    shadowColor: "#000",
-    shadowOpacity: 0.2,
-    shadowRadius: 6,
+    shadowColor: "#2563eb",
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
     elevation: 4,
   },
 
   primaryText: {
     color: "white",
-    fontWeight: "700",
+    fontWeight: "800",
     textAlign: "center",
   },
 
   sectionTitle: {
     fontSize: 20,
-    fontWeight: "800",
-    marginTop: 20,
+    fontWeight: "900",
+    marginTop: 22,
     marginBottom: 10,
-    color: "#fff",
+    color: "#ffffff",
   },
 
   post: {
     padding: 16,
-    borderRadius: 16,
+    borderRadius: 18,
     marginBottom: 12,
 
-    backgroundColor: "rgba(255,255,255,0.12)",
+    backgroundColor: "rgba(255,255,255,0.08)",
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.15)",
+    borderColor: "rgba(255,255,255,0.12)",
 
     shadowColor: "#000",
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
-    elevation: 3,
+    shadowOpacity: 0.2,
+    shadowRadius: 10,
+    elevation: 4,
   },
 
   postTitle: {
     fontSize: 16,
-    fontWeight: "700",
-    marginBottom: 8,
-    color: "#fff",
+    fontWeight: "800",
+    marginBottom: 10,
+    color: "#ffffff",
   },
 
   openPostButton: {
     alignSelf: "flex-start",
-    backgroundColor: "#2563eb",
-    paddingVertical: 8,
+    backgroundColor: "#3b82f6",
+    paddingVertical: 9,
     paddingHorizontal: 14,
-    borderRadius: 10,
+    borderRadius: 12,
   },
 
   openPostText: {
     color: "white",
-    fontWeight: "600",
+    fontWeight: "700",
   },
 
   center: {
